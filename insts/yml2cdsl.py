@@ -23,13 +23,14 @@ class OperandUse(IntFlag):
     WR = 2
     RW = RD | WR
 
-assert len(sys.argv) == 2
+assert len(sys.argv) == 3
 input_file = Path(sys.argv[1])
+output_file = Path(sys.argv[2])
 assert input_file.is_file()
 
 with open(input_file, "r") as f:
     data = yaml.safe_load(f)
-print("data", data, len(data))
+# print("data", data, len(data))
 
 instr_status = {}
 instr_reason = {}
@@ -37,6 +38,7 @@ instr_operands = {}
 instr_encoding = {}
 instr_assembly = {}
 instr_behav = {}
+instr_code = {}
 
 """
 Example:
@@ -65,12 +67,12 @@ for entry in data:
     dsts = entry["dsts"]
     free_bits = entry["free_bits"]
     description = entry["description"]
-    print("mnemonic", mnemonic)
-    print("enc_size", enc_size)
-    print("srcs", srcs)
-    print("dsts", dsts)
-    print("free_bits", free_bits)
-    print("description", description)
+    # print("mnemonic", mnemonic)
+    # print("enc_size", enc_size)
+    # print("srcs", srcs)
+    # print("dsts", dsts)
+    # print("free_bits", free_bits)
+    # print("description", description)
     if enc_size != 32:
         instr_status[mnemonic] = Status.SKIPPED
         instr_reason[mnemonic] = "only supporting 32-bit instructions"
@@ -85,19 +87,19 @@ for entry in data:
                 rd_op_names = re.compile(r"(a\d|rs\d|rd|(?:[su]?imm\d+(?:_\d+)?))").findall(descr)
             else:
                 lhs, rhs = descr.split("=", 1)
-                print("lhs", lhs)
-                print("rhs", rhs)
+                # print("lhs", lhs)
+                # print("rhs", rhs)
                 wr_op_names = re.compile(r"(a\d|rs\d|rd|[su]?imm\d+(?:_\d+)?)").findall(lhs)
                 assert len(wr_op_names) == 1
                 rd_op_names = re.compile(r"(a\d|rs\d|rd|[su]?imm\d+(?:_\d+)?)").findall(rhs)
                 assert len(rd_op_names) > 0
             # TODO: handle width5/shamt5
             wr_op_names = set(wr_op_names)
-            print("wr_op_names", wr_op_names)
-            print("rd_op_names", rd_op_names)
+            # print("wr_op_names", wr_op_names)
+            # print("rd_op_names", rd_op_names)
             rd_op_names = set(rd_op_names)
             op_names = wr_op_names | rd_op_names
-            print("op_names", op_names)
+            # print("op_names", op_names)
             def op_helper(op_name, op_use):
                 op_type = OperandType.UNKNOWN
                 op_bits = -1
@@ -132,14 +134,14 @@ for entry in data:
                 assert op_use > 0
                 return op_type, op_bits, op_sign, op_use
             for op_name in op_names:
-                print("op_name", op_name)
+                # print("op_name", op_name)
                 op_use = OperandUse.UNKNOWN
                 if op_name in wr_op_names:
                     op_use |= OperandUse.WR
                 if op_name in rd_op_names:
                     op_use |= OperandUse.RD
                 op = op_helper(op_name, op_use)
-                print("op", op)
+                # print("op", op)
                 ret[op_name] = op
             return ret
         def check_operands(operands):
@@ -171,10 +173,10 @@ for entry in data:
                 assert descr_[2:5] == " = ", "Non-branch instructions need to start with '?? = '"
                 # raise NotImplementedError("Non-branch instrs")
             operands_ = parse_operands(descr_, is_branch)
-            print("operands_", operands_)
+            # print("operands_", operands_)
             # input("1")
             operands.update(operands_)
-        print("operands", operands)
+        # print("operands", operands)
         check_operands(operands)
         def gen_behav(descrs, operands):
             ret = []
@@ -217,6 +219,7 @@ for entry in data:
                 if op_type == OperandType.REG:
                     ret = f"name({ret})"
                 ret = f"{{{ret}}}"
+                return ret
             for op_name in sorted(writes):
                 op = operands[op_name]
                 temp = asm_helper(op_name, op)
@@ -230,19 +233,46 @@ for entry in data:
             return ", ".join(ret)
         behav_cdsl = gen_behav(descrs, operands)
         assembly = gen_assembly(operands)
-        print("behav_cdsl", behav_cdsl)
+        # print("behav_cdsl", behav_cdsl)
         return behav_cdsl, assembly
     try:
         behav, assembly = parse_descr(description)
         instr_behav[mnemonic] = behav
         instr_assembly[mnemonic] = assembly
-        # instr_cdsl = combine_cdsl(behav)
+        def combine_cdsl(menomonic, assembly, behav):
+            asm_name = mnemonic.lower()
+            cdsl_name = asm_name.upper().replace(".", "_")
+            return f"""        {cdsl_name} {{
+            encoding: auto;
+            assembly: {{"{asm_name}", "{assembly}"}};
+            behavior: {{  // TODO: add x0 checks!
+                {behav}
+            }}
+        }}
+"""
+        instr_cdsl = combine_cdsl(mnemonic, assembly, behav)
+        instr_code[mnemonic] = instr_cdsl
         instr_status[mnemonic] = Status.SUCCESS
-        print("behav", behav)
+        # print("behav", behav)
     except Exception as exe:
+        # raise exe
         instr_status[mnemonic] = Status.FAILURE
         instr_reason[mnemonic] = str(exe)
 
+pre = """import "RISCVBase.core_desc"
+
+InstructionSet ScalarEfficiency extends RISCVBase {
+    instructions {
+"""
+post = """
+    }
+}
+"""
+mid = "\n".join([f"{code}" for code in instr_code.values()])
+out = pre + mid + post
+
+with open(output_file, "w") as f:
+    f.write(out)
 
 # print("instr_status", instr_status)
 status_counts = {status: list(instr_status.values()).count(status) for status in Status}
@@ -255,7 +285,14 @@ print("Reasons:")
 print("--------")
 print("\n".join([f"  {reason}: {instrs}" for reason, instrs in reasons.items()]))
 print()
+# print("Behav:")
+# print("--------")
+# print("\n".join([f"  {instr}:\n{behav}" for instr, behav in instr_behav.items()]))
+# print()
+# print("Assembly:")
+# print("--------")
+# print("\n".join([f"  {instr}: {assembly}" for instr, assembly in instr_assembly.items()]))
+print()
 print("Code:")
-print("--------")
-print("\n".join([f"  {instr}:\n{behav}\n" for instr, behav in instr_behav.items()]))
-print("\n".join([f"  {instr}:\n{behav}\n" for instr, behav in instr_assembly.items()]))
+print("-----")
+print(out)
