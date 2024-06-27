@@ -260,7 +260,7 @@
   class: Any
   donator: Qualcomm
   implemented: false
-  description: 'rd'' = (rd'' == 0) ? rs1'' : rd'''
+  description: 'rd = (rd == 0) ? rs1 : rd'
   srcs: 2
   dsts: 1
   free_bits: 6
@@ -715,7 +715,7 @@
   class: Any
   donator: Qualcomm
   implemented: false
-  description: rd = rs1[width5+sham5t:shamt5]
+  description: rd = rs1[width5+shamt5:shamt5]
   srcs: 2
   dsts: 1
   free_bits: 20
@@ -780,10 +780,10 @@
   class: Any
   donator: Qualcomm
   implemented: false
-  description: "\"rd = ((n == 0) ? x0 : rd) | (imm16 << (n*16)"
+  description: "rd = ((n == 0) ? x0 : rd) | (imm16 << (n*16)"
   srcs: 0
   dsts: 1
-  free_bits: 1
+  free_bits: 23
   notes: '64'
 - mnemonic: LI.48
   categories:
