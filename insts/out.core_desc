@@ -1,0 +1,360 @@
+import "RISCVBase.core_desc"
+
+InstructionSet ScalarEfficiency extends RISCVBase {
+    instructions {
+        BEQI {
+            encoding: auto;
+            assembly: {"beqi", "{name(rs1)}, {simm12}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                if (X[rs1] == simm5) PC += (simm12 << 1);
+            }
+        }
+
+        BNEI {
+            encoding: auto;
+            assembly: {"bnei", "{name(rs1)}, {simm12}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                if (X[rs1] != simm5) PC += (simm12 << 1);
+            }
+        }
+
+        BLTI {
+            encoding: auto;
+            assembly: {"blti", "{name(rs1)}, {simm12}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                if ((signed)(X[rs1]) < simm5) PC += (simm12 << 1);
+            }
+        }
+
+        BLTUI {
+            encoding: auto;
+            assembly: {"bltui", "{name(rs1)}, {simm12}, {uimm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                if (X[rs1] < uimm5) PC += (simm12 << 1);
+            }
+        }
+
+        BGEI {
+            encoding: auto;
+            assembly: {"bgei", "{name(rs1)}, {simm12}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                if ((signed)(X[rs1]) >= simm5) PC += (simm12 << 1);
+            }
+        }
+
+        BGEUI {
+            encoding: auto;
+            assembly: {"bgeui", "{name(rs1)}, {simm12}, {uimm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                if (X[rs1] >= uimm5) PC += (simm12 << 1);
+            }
+        }
+
+        BEQZ_FAR {
+            encoding: auto;
+            assembly: {"beqz.far", "{name(rs1)}, {simm17}"};
+            behavior: {  // TODO: add x0 checks,...
+                if (X[rs1] == 0) PC += (simm17 << 1);
+            }
+        }
+
+        BNEZ_FAR {
+            encoding: auto;
+            assembly: {"bnez.far", "{name(rs1)}, {simm17}"};
+            behavior: {  // TODO: add x0 checks,...
+                if (X[rs1] != 0) PC += (simm17 << 1);
+            }
+        }
+
+        BLTZ_FAR {
+            encoding: auto;
+            assembly: {"bltz.far", "{name(rs1)}, {simm17}"};
+            behavior: {  // TODO: add x0 checks,...
+                if ((signed)(X[rs1]) < 0) PC += (simm17 << 1);
+            }
+        }
+
+        BGEZ_FAR {
+            encoding: auto;
+            assembly: {"bgez.far", "{name(rs1)}, {simm17}"};
+            behavior: {  // TODO: add x0 checks,...
+                if ((signed)(X[rs1]) >= 0) PC += (simm17 << 1);
+            }
+        }
+
+        CSELEQZ {
+            encoding: auto;
+            assembly: {"cseleqz", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] == 0) ? X[rs1] : X[rs2];
+            }
+        }
+
+        CSELNEZ {
+            encoding: auto;
+            assembly: {"cselnez", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] != 0) ? X[rs1] : X[rs2];
+            }
+        }
+
+        CSELLTZ {
+            encoding: auto;
+            assembly: {"cselltz", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) < 0) ? X[rs1] : X[rs2];
+            }
+        }
+
+        CSELGEZ {
+            encoding: auto;
+            assembly: {"cselgez", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) >= 0 ) ? X[rs1] : X[rs2];
+            }
+        }
+
+        CSELEQZI {
+            encoding: auto;
+            assembly: {"cseleqzi", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] == 0) ? X[rs1] : imm5;
+            }
+        }
+
+        CMOVEQ {
+            encoding: auto;
+            assembly: {"cmoveq", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] == X[rs1]) ? X[rs2] : X[rd];
+            }
+        }
+
+        CMOVNE {
+            encoding: auto;
+            assembly: {"cmovne", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] != X[rs1]) ? X[rs2] : X[rd];
+            }
+        }
+
+        CMOVLT {
+            encoding: auto;
+            assembly: {"cmovlt", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) < (signed)(X[rs1])) ? X[rs2] : X[rd];
+            }
+        }
+
+        CMOVLTU {
+            encoding: auto;
+            assembly: {"cmovltu", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] < X[rs1]) ? X[rs2] : X[rd];
+            }
+        }
+
+        CMOVGE {
+            encoding: auto;
+            assembly: {"cmovge", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) >= (signed)(X[rs1])) ? X[rs2] : X[rd];
+            }
+        }
+
+        CMOVGEU {
+            encoding: auto;
+            assembly: {"cmovgeu", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] >= X[rs1]) ? X[rs2] : X[rd];
+            }
+        }
+
+        CMOVEQ_RI {
+            encoding: auto;
+            assembly: {"cmoveq.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] == X[rs1]) ? imm5 : X[rd];
+            }
+        }
+
+        CMOVNE_RI {
+            encoding: auto;
+            assembly: {"cmovne.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] != X[rs1]) ? imm5 : X[rd];
+            }
+        }
+
+        CMOVLT_RI {
+            encoding: auto;
+            assembly: {"cmovlt.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) < (signed)(X[rs1])) ? imm5 : X[rd];
+            }
+        }
+
+        CMOVLTU_RI {
+            encoding: auto;
+            assembly: {"cmovltu.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] < X[rs1]) ? imm5 : X[rd];
+            }
+        }
+
+        CMOVGE_RI {
+            encoding: auto;
+            assembly: {"cmovge.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) >= (signed)(X[rs1])) ? imm5 : X[rd];
+            }
+        }
+
+        CMOVGEU_RI {
+            encoding: auto;
+            assembly: {"cmovgeu.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] >= X[rs1]) ? imm5 : X[rd];
+            }
+        }
+
+        CMOVEQ_IR {
+            encoding: auto;
+            assembly: {"cmoveq.ir", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] == imm5) ? X[rs1] : X[rd];
+            }
+        }
+
+        CMOVNE_IR {
+            encoding: auto;
+            assembly: {"cmovne.ir", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] != imm5) ? X[rs1] : X[rd];
+            }
+        }
+
+        CMOVLT_IR {
+            encoding: auto;
+            assembly: {"cmovlt.ir", "{name(rd)}, {name(rs1)}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) < simm5) ? X[rs1] : X[rd];
+            }
+        }
+
+        CMOVLTU_IR {
+            encoding: auto;
+            assembly: {"cmovltu.ir", "{name(rd)}, {name(rs1)}, {uimm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] < uimm5) ? X[rs1] : X[rd];
+            }
+        }
+
+        CMOVGE_IR {
+            encoding: auto;
+            assembly: {"cmovge.ir", "{name(rd)}, {name(rs1)}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) >= simm5) ? X[rs1] : X[rd];
+            }
+        }
+
+        CMOVGEU_IR {
+            encoding: auto;
+            assembly: {"cmovgeu.ir", "{name(rd)}, {name(rs1)}, {uimm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] >= uimm5) ? X[rs1] : X[rd];
+            }
+        }
+
+        CMOVEQ_II {
+            encoding: auto;
+            assembly: {"cmoveq.ii", "{name(rd)}, {imm5}, {imm5_2}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] == imm5) ? imm5_2 : X[rd];
+            }
+        }
+
+        CMOVNE_II {
+            encoding: auto;
+            assembly: {"cmovne.ii", "{name(rd)}, {imm5}, {imm5_2}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] != imm5) ? imm5_2 : X[rd];
+            }
+        }
+
+        CMOVLT_II {
+            encoding: auto;
+            assembly: {"cmovlt.ii", "{name(rd)}, {imm5_2}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) < simm5) ? imm5_2 : X[rd];
+            }
+        }
+
+        CMOVLTU_II {
+            encoding: auto;
+            assembly: {"cmovltu.ii", "{name(rd)}, {imm5_2}, {uimm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] < uimm5) ? imm5_2 : X[rd];
+            }
+        }
+
+        CMOVGE_II {
+            encoding: auto;
+            assembly: {"cmovge.ii", "{name(rd)}, {imm5_2}, {simm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((signed)(X[rd]) >= simm5) ? imm5_2 : X[rd];
+            }
+        }
+
+        CMOVGEU_II {
+            encoding: auto;
+            assembly: {"cmovgeu.ii", "{name(rd)}, {imm5_2}, {uimm5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (X[rd] >= uimm5) ? imm5_2 : X[rd];
+            }
+        }
+
+        MPYADDI {
+            encoding: auto;
+            assembly: {"mpyaddi", "{name(rd)}, {imm5}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] += X[rs1] * imm5;
+            }
+        }
+
+        MVP0 {
+            encoding: auto;
+            assembly: {"mvp0", "{name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[10] = X[rs1];
+X[11] = X[rs2];
+            }
+        }
+
+        MVP2 {
+            encoding: auto;
+            assembly: {"mvp2", "{name(rs1)}, {name(rs2)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[12] = X[rs1];
+X[13] = X[rs2];
+            }
+        }
+
+        CLO {
+            encoding: auto;
+            assembly: {"clo", "{name(rd)}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = clo_xlen(X[rs1]);
+            }
+        }
+
+        CTO {
+            encoding: auto;
+            assembly: {"cto", "{name(rd)}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = cto_xlen(X[rs1]);
+            }
+        }
+
+    }
+}

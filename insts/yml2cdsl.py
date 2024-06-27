@@ -245,7 +245,7 @@ for entry in data:
             return f"""        {cdsl_name} {{
             encoding: auto;
             assembly: {{"{asm_name}", "{assembly}"}};
-            behavior: {{  // TODO: add x0 checks!
+            behavior: {{  // TODO: add x0 checks,...
                 {behav}
             }}
         }}
