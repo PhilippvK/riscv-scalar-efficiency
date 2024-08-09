@@ -245,21 +245,66 @@ for entry in data:
                 ret.append(temp)
             return ", ".join(ret)
 
+        def gen_operands_code(operands):
+            ret = []
+            for op_name, op in operands.items():
+                op_type, op_bits, op_sign, op_use = op
+                if op_bits == 0:
+                    continue
+                op_str = ""
+                attrs = []
+                if op_type == OperandType.REG:
+                    assert not op_sign
+                    attrs.append("[[reg]]")
+                elif op_type == OperandType.IMM:
+                    assert op_use == OperandUse.RD
+                    attrs.append("[[imm]]")
+                if op_sign:
+                    op_str += "signed"
+                else:
+                    op_str += "unsigned"
+                op_str += f"<{op_bits}>"
+                op_str += f" {op_name}"
+                if op_use == OperandUse.RW:
+                    attrs.append("[[inout]]")
+                elif op_use == OperandUse.RD:
+                    attrs.append("[[in]]")
+                elif op_use == OperandUse.WR:
+                    attrs.append("[[out]]")
+                if len(attrs) > 0:
+                    attrs_str = " ".join(attrs)
+                    op_str += f" {attrs_str}"
+                op_str += ";"
+                ret.append(op_str)
+
+            return "\n".join(ret)
+
         behav_cdsl = gen_behav(descrs, operands)
         assembly = gen_assembly(operands)
+        operands_code = gen_operands_code(operands)
+        # print("oc", operands_code)
+        # input("!")
         # print("behav_cdsl", behav_cdsl)
-        return behav_cdsl, assembly
+        return behav_cdsl, assembly, operands_code
 
     try:
-        behav, assembly = parse_descr(description)
+        behav, assembly, operands_code = parse_descr(description)
+        # print("oc", operands_code)
+        # input("!")
         behav = "\n".join(["    " * 4 + row for row in behav.splitlines()])
+        operands_code = "\n".join(["    " * 4 + row for row in operands_code.splitlines()])
         instr_behav[mnemonic] = behav
         instr_assembly[mnemonic] = assembly
 
-        def combine_cdsl(menomonic, assembly, behav):
+        def combine_cdsl(operands_code, menomonic, assembly, behav):
+            # print("oc", operands_code)
+            # input("!")
             asm_name = mnemonic.lower()
             cdsl_name = asm_name.upper().replace(".", "_")
             return f"""        {cdsl_name} {{
+            operands: {{
+{operands_code}
+            }}
             encoding: auto;
             assembly: {{"{asm_name}", "{assembly}"}};
             behavior: {{  // TODO: add x0 checks,...
@@ -268,7 +313,7 @@ for entry in data:
         }}
 """
 
-        instr_cdsl = combine_cdsl(mnemonic, assembly, behav)
+        instr_cdsl = combine_cdsl(operands_code, mnemonic, assembly, behav)
         instr_code[mnemonic] = instr_cdsl
         instr_status[mnemonic] = Status.SUCCESS
         # print("behav", behav)
