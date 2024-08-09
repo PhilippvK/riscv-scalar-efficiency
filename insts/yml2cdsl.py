@@ -6,22 +6,26 @@ from pathlib import Path
 
 import yaml
 
+
 class Status(IntEnum):
     UNKNOWN = auto()
     SUCCESS = auto()
     FAILURE = auto()
     SKIPPED = auto()
 
+
 class OperandType(IntEnum):
     UNKNOWN = auto()
     REG = auto()
     IMM = auto()
+
 
 class OperandUse(IntFlag):
     UNKNOWN = 0
     RD = 1
     WR = 2
     RW = RD | WR
+
 
 assert len(sys.argv) == 3
 input_file = Path(sys.argv[1])
@@ -78,8 +82,10 @@ for entry in data:
         instr_reason[mnemonic] = "only supporting 32-bit instructions"
         continue
     instr_status[mnemonic] = Status.UNKNOWN
+
     def parse_descr(descr):
         assert "\n" not in descr, "Multi-line not allowed. Use ; instead"
+
         def parse_operands(descr, is_branch):
             ret = {}
             if is_branch:
@@ -99,6 +105,7 @@ for entry in data:
             # print("rd_op_names", rd_op_names)
             rd_op_names = set(rd_op_names)
             op_names = wr_op_names | rd_op_names
+
             # print("op_names", op_names)
             def op_helper(op_name, op_use):
                 op_type = OperandType.UNKNOWN
@@ -133,6 +140,7 @@ for entry in data:
                     op_sign = False
                 assert op_use > 0
                 return op_type, op_bits, op_sign, op_use
+
             for op_name in op_names:
                 # print("op_name", op_name)
                 op_use = OperandUse.UNKNOWN
@@ -144,6 +152,7 @@ for entry in data:
                 # print("op", op)
                 ret[op_name] = op
             return ret
+
         def check_operands(operands):
             srcs_ = 0
             dsts_ = 0
@@ -178,6 +187,7 @@ for entry in data:
             operands.update(operands_)
         # print("operands", operands)
         check_operands(operands)
+
         def gen_behav(descrs, operands):
             ret = []
             REPLACEMENTS = {
@@ -195,12 +205,12 @@ for entry in data:
                     if op_type != OperandType.REG:
                         continue
                     if op_bits == 0:
-                         if op_name in ["x0"]:
-                             cdsl_op = op_name.replace("x", "")
-                         elif op_name in ["a0", "a1", "a2", "a3"]:
-                             cdsl_op = str(int(op_name.replace("a", "")) + 10)
-                         else:
-                              raise RuntimeError(f"Unhandeled case: {op_name}")
+                        if op_name in ["x0"]:
+                            cdsl_op = op_name.replace("x", "")
+                        elif op_name in ["a0", "a1", "a2", "a3"]:
+                            cdsl_op = str(int(op_name.replace("a", "")) + 10)
+                        else:
+                            raise RuntimeError(f"Unhandeled case: {op_name}")
                     else:
                         cdsl_op = op_name
                     cdsl_op = f"X[{cdsl_op}]"
@@ -209,10 +219,12 @@ for entry in data:
                     cdsl += ";"
                 ret.append(cdsl)
             return "\n".join(ret)
+
         def gen_assembly(operands):
             ret = []
             reads = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.RD]
             writes = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.WR]
+
             def asm_helper(op_name, op):
                 op_type, op_bits, op_sign, op_use = op
                 ret = op_name
@@ -220,6 +232,7 @@ for entry in data:
                     ret = f"name({ret})"
                 ret = f"{{{ret}}}"
                 return ret
+
             for op_name in sorted(writes):
                 op = operands[op_name]
                 temp = asm_helper(op_name, op)
@@ -231,14 +244,18 @@ for entry in data:
                 temp = asm_helper(op_name, op)
                 ret.append(temp)
             return ", ".join(ret)
+
         behav_cdsl = gen_behav(descrs, operands)
         assembly = gen_assembly(operands)
         # print("behav_cdsl", behav_cdsl)
         return behav_cdsl, assembly
+
     try:
         behav, assembly = parse_descr(description)
+        behav = "\n".join(["    " * 4 + row for row in behav.splitlines()])
         instr_behav[mnemonic] = behav
         instr_assembly[mnemonic] = assembly
+
         def combine_cdsl(menomonic, assembly, behav):
             asm_name = mnemonic.lower()
             cdsl_name = asm_name.upper().replace(".", "_")
@@ -246,10 +263,11 @@ for entry in data:
             encoding: auto;
             assembly: {{"{asm_name}", "{assembly}"}};
             behavior: {{  // TODO: add x0 checks,...
-                {behav}
+{behav}
             }}
         }}
 """
+
         instr_cdsl = combine_cdsl(mnemonic, assembly, behav)
         instr_code[mnemonic] = instr_cdsl
         instr_status[mnemonic] = Status.SUCCESS
@@ -279,7 +297,10 @@ status_counts = {status: list(instr_status.values()).count(status) for status in
 print("Status:")
 print("-------")
 print("\n".join([f"  {status.name}: #{count}" for status, count in status_counts.items()]))
-reasons = {reason: [instr_name for instr_name, reason_ in instr_reason.items() if reason_ == reason] for reason in set(instr_reason.values())}
+reasons = {
+    reason: [instr_name for instr_name, reason_ in instr_reason.items() if reason_ == reason]
+    for reason in set(instr_reason.values())
+}
 print()
 print("Reasons:")
 print("--------")

@@ -327,7 +327,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             assembly: {"mvp0", "{name(rs1)}, {name(rs2)}"};
             behavior: {  // TODO: add x0 checks,...
                 X[10] = X[rs1];
-X[11] = X[rs2];
+                X[11] = X[rs2];
             }
         }
 
@@ -336,7 +336,7 @@ X[11] = X[rs2];
             assembly: {"mvp2", "{name(rs1)}, {name(rs2)}"};
             behavior: {  // TODO: add x0 checks,...
                 X[12] = X[rs1];
-X[13] = X[rs2];
+                X[13] = X[rs2];
             }
         }
 
