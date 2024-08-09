@@ -544,29 +544,29 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             }
         }
 
-        CLO {
-            operands: {
-                unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rd [[reg]] [[out]];
-            }
-            encoding: auto;
-            assembly: {"clo", "{name(rd)}, {name(rs1)}"};
-            behavior: {  // TODO: add x0 checks,...
-                X[rd] = clo_xlen(X[rs1]);
-            }
-        }
+        // CLO {
+        //     operands: {
+        //         unsigned<5> rs1 [[reg]] [[in]];
+        //         unsigned<5> rd [[reg]] [[out]];
+        //     }
+        //     encoding: auto;
+        //     assembly: {"clo", "{name(rd)}, {name(rs1)}"};
+        //     behavior: {  // TODO: add x0 checks,...
+        //         X[rd] = clo_xlen(X[rs1]);
+        //     }
+        // }
 
-        CTO {
-            operands: {
-                unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rd [[reg]] [[out]];
-            }
-            encoding: auto;
-            assembly: {"cto", "{name(rd)}, {name(rs1)}"};
-            behavior: {  // TODO: add x0 checks,...
-                X[rd] = cto_xlen(X[rs1]);
-            }
-        }
+        // CTO {
+        //     operands: {
+        //         unsigned<5> rs1 [[reg]] [[in]];
+        //         unsigned<5> rd [[reg]] [[out]];
+        //     }
+        //     encoding: auto;
+        //     assembly: {"cto", "{name(rd)}, {name(rs1)}"};
+        //     behavior: {  // TODO: add x0 checks,...
+        //         X[rd] = cto_xlen(X[rs1]);
+        //     }
+        // }
 
     }
 }
