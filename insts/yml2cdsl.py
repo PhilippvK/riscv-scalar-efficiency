@@ -10,7 +10,9 @@ import yaml
 REPLACEMENTS = {
     "count_leading_ones": "clo_xlen",
     "count_trailing_ones": "cto_xlen",
+    "reverse_bit_order": "brev_xlen",
     "$signed": "(signed)",
+    "sign_extend": "(signed<XLEN>)(unsigned<XLEN>)",
     "pc": "PC",
 }
 
@@ -352,10 +354,12 @@ InstructionSet ScalarEfficiency extends RISCVBase {
     # print("Assembly:")
     # print("--------")
     # print("\n".join([f"  {instr}: {assembly}" for instr, assembly in instr_assembly.items()]))
-    print()
-    print("Code:")
-    print("-----")
-    print(out)
+    PRINT_CODE = False
+    if PRINT_CODE:
+        print()
+        print("Code:")
+        print("-----")
+        print(out)
 
 
 if __name__ == "__main__":
