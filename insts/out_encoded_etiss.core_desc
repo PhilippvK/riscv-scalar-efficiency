@@ -266,22 +266,22 @@ InstructionSet ScalarEfficiencyRV32 extends RV32I {
         }
         EXTS {
             encoding: 2'b00 :: shamt5[4:0] :: width5[4:0] :: rs1[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-            assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+            assembly: {"exts", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
             behavior: X[rd] = (signed)(((signed)((X[rs1][width5 + shamt5:shamt5]))));
         }
         EXTU {
             encoding: 2'b01 :: shamt5[4:0] :: width5[4:0] :: rs1[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-            assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+            assembly: {"extu", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
             behavior: X[rd] = (unsigned)(((unsigned)((X[rs1][width5 + shamt5:shamt5]))));
         }
         INSB {
             encoding: 2'b10 :: shamt5[4:0] :: width5[4:0] :: rs1[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-            assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+            assembly: {"exts", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
             behavior: X[rd][width5 + shamt5:shamt5] = X[rs1][width5 - 1:0];
         }
         INSBI {
             encoding: 2'b11 :: shamt5[4:0] :: width5[4:0] :: imm5[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-            assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+            assembly: {"extu", "{name(rd)}, {imm5}, {width5}, {shamt5}"};
             behavior: X[rd][width5 + shamt5:shamt5] = imm5[width5 - 1:0];
         }
     }
@@ -552,22 +552,22 @@ InstructionSet ScalarEfficiencyRV32 extends RV32I {
 //         }
 //         EXTS {
 //             encoding: 2'b00 :: shamt5[4:0] :: width5[4:0] :: rs1[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-//             assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+//             assembly: {"exts", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
 //             behavior: X[rd] = (signed)(((signed)((X[rs1][width5 + shamt5:shamt5]))));
 //         }
 //         EXTU {
 //             encoding: 2'b01 :: shamt5[4:0] :: width5[4:0] :: rs1[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-//             assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+//             assembly: {"extu", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
 //             behavior: X[rd] = (unsigned)(((unsigned)((X[rs1][width5 + shamt5:shamt5]))));
 //         }
 //         INSB {
 //             encoding: 2'b10 :: shamt5[4:0] :: width5[4:0] :: rs1[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-//             assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+//             assembly: {"exts", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
 //             behavior: X[rd][width5 + shamt5:shamt5] = X[rs1][width5 - 1:0];
 //         }
 //         INSBI {
 //             encoding: 2'b11 :: shamt5[4:0] :: width5[4:0] :: imm5[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-//             assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+//             assembly: {"extu", "{name(rd)}, {imm5} {width5}, {shamt5}"};
 //             behavior: X[rd][width5 + shamt5:shamt5] = imm5[width5 - 1:0];
 //         }
 //     }

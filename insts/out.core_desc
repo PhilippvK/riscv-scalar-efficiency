@@ -606,7 +606,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
                 unsigned<5> rd [[is_reg]] [[inout]];
             }
             encoding: auto;
-            assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+            assembly: {"exts", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
             behavior: {  // TODO: add x0 checks,...
                 X[rd] = (signed<XLEN>)((signed)(X[rs1][width5+shamt5:shamt5]));
             }
@@ -620,7 +620,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
                 unsigned<5> rd [[is_reg]] [[inout]];
             }
             encoding: auto;
-            assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+            assembly: {"extu", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
             behavior: {  // TODO: add x0 checks,...
                 X[rd] = (unsigned<XLEN>)((unsigned)(X[rs1][width5+shamt5:shamt5]));
             }
@@ -634,7 +634,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
                 unsigned<5> rd [[is_reg]] [[inout]];
             }
             encoding: auto;
-            assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+            assembly: {"exts", "{name(rd)}, {name(rs1)}, {width5}, {shamt5}"};
             behavior: {  // TODO: add x0 checks,...
                 X[rd][width5+shamt5:shamt5] = X[rs1][width5-1:0];
             }
@@ -648,7 +648,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
                 unsigned<5> rd [[is_reg]] [[inout]];
             }
             encoding: auto;
-            assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+            assembly: {"extu", "{name(rd)}, {width5}, {shamt5}"};
             behavior: {  // TODO: add x0 checks,...
                 X[rd][width5+shamt5:shamt5] = imm5[width5-1:0];
             }
