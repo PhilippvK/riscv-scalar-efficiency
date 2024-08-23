@@ -210,10 +210,10 @@ def parse_descr(descr, srcs, dsts, free_bits):
             attrs = []
             if op_type == OperandType.REG:
                 assert not op_sign
-                attrs.append("[[reg]]")
+                attrs.append("[[is_reg]]")
             elif op_type == OperandType.IMM:
                 assert op_use == OperandUse.RD
-                attrs.append("[[imm]]")
+                attrs.append("[[is_imm]]")
             if op_sign:
                 op_str += "signed"
             else:
