@@ -1,12 +1,17 @@
 import "RISCVBase.core_desc"
 
 InstructionSet ScalarEfficiency extends RISCVBase {
+    functions {
+        extern unsigned<XLEN> brev_xlen(unsigned<XLEN>);
+        extern unsigned<XLEN> clo_xlen(unsigned<XLEN>);
+        extern unsigned<XLEN> cto_xlen(unsigned<XLEN>);
+    }
     instructions {
         BEQI {
             operands: {
-                signed<12> simm12 [[imm]] [[in]];
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<5> simm5 [[imm]] [[in]];
+                signed<12> simm12 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"beqi", "{name(rs1)}, {simm12}, {simm5}"};
@@ -17,9 +22,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BNEI {
             operands: {
-                signed<12> simm12 [[imm]] [[in]];
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<5> simm5 [[imm]] [[in]];
+                signed<12> simm12 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bnei", "{name(rs1)}, {simm12}, {simm5}"};
@@ -30,9 +35,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BLTI {
             operands: {
-                signed<12> simm12 [[imm]] [[in]];
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<5> simm5 [[imm]] [[in]];
+                signed<12> simm12 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"blti", "{name(rs1)}, {simm12}, {simm5}"};
@@ -43,9 +48,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BLTUI {
             operands: {
-                signed<12> simm12 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
                 unsigned<5> uimm5 [[imm]] [[in]];
+                signed<12> simm12 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bltui", "{name(rs1)}, {simm12}, {uimm5}"};
@@ -56,9 +61,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BGEI {
             operands: {
-                signed<12> simm12 [[imm]] [[in]];
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<5> simm5 [[imm]] [[in]];
+                signed<12> simm12 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bgei", "{name(rs1)}, {simm12}, {simm5}"};
@@ -69,9 +74,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BGEUI {
             operands: {
-                signed<12> simm12 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
                 unsigned<5> uimm5 [[imm]] [[in]];
+                signed<12> simm12 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bgeui", "{name(rs1)}, {simm12}, {uimm5}"};
@@ -82,8 +87,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BEQZ_FAR {
             operands: {
-                signed<17> simm17 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<17> simm17 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"beqz.far", "{name(rs1)}, {simm17}"};
@@ -94,8 +99,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BNEZ_FAR {
             operands: {
-                signed<17> simm17 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<17> simm17 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bnez.far", "{name(rs1)}, {simm17}"};
@@ -106,8 +111,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BLTZ_FAR {
             operands: {
-                signed<17> simm17 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<17> simm17 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bltz.far", "{name(rs1)}, {simm17}"};
@@ -118,8 +123,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         BGEZ_FAR {
             operands: {
-                signed<17> simm17 [[imm]] [[in]];
                 unsigned<5> rs1 [[reg]] [[in]];
+                signed<17> simm17 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"bgez.far", "{name(rs1)}, {simm17}"};
@@ -131,8 +136,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CSELEQZ {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cseleqz", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -144,8 +149,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CSELNEZ {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cselnez", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -157,8 +162,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CSELLTZ {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cselltz", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -170,8 +175,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CSELGEZ {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cselgez", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -183,8 +188,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CSELEQZI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cseleqzi", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -196,8 +201,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVEQ {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmoveq", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -209,8 +214,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVNE {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovne", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -222,8 +227,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVLT {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovlt", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -235,8 +240,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVLTU {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovltu", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -248,8 +253,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVGE {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovge", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -261,8 +266,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVGEU {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rs2 [[reg]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs2 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovgeu", "{name(rd)}, {name(rs1)}, {name(rs2)}"};
@@ -274,8 +279,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVEQ_RI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmoveq.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -287,8 +292,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVNE_RI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovne.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -300,8 +305,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVLT_RI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovlt.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -313,8 +318,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVLTU_RI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovltu.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -326,8 +331,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVGE_RI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovge.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -339,8 +344,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVGEU_RI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovgeu.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -352,8 +357,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVEQ_IR {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmoveq.ir", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -365,8 +370,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVNE_IR {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovne.ir", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -378,8 +383,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVLT_IR {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                signed<5> simm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovlt.ir", "{name(rd)}, {name(rs1)}, {simm5}"};
@@ -390,9 +395,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVLTU_IR {
             operands: {
-                unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rd [[reg]] [[inout]];
                 unsigned<5> uimm5 [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs1 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovltu.ir", "{name(rd)}, {name(rs1)}, {uimm5}"};
@@ -404,8 +409,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         CMOVGE_IR {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                signed<5> simm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovge.ir", "{name(rd)}, {name(rs1)}, {simm5}"};
@@ -416,9 +421,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVGEU_IR {
             operands: {
-                unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> rd [[reg]] [[inout]];
                 unsigned<5> uimm5 [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> rs1 [[reg]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovgeu.ir", "{name(rd)}, {name(rs1)}, {uimm5}"};
@@ -429,8 +434,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVEQ_II {
             operands: {
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> imm5_2 [[imm]] [[in]];
             }
             encoding: auto;
@@ -442,8 +447,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVNE_II {
             operands: {
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> imm5_2 [[imm]] [[in]];
             }
             encoding: auto;
@@ -455,8 +460,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVLT_II {
             operands: {
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> imm5_2 [[imm]] [[in]];
             }
             encoding: auto;
@@ -468,9 +473,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVLTU_II {
             operands: {
+                unsigned<5> uimm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
                 unsigned<5> imm5_2 [[imm]] [[in]];
-                unsigned<5> uimm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovltu.ii", "{name(rd)}, {imm5_2}, {uimm5}"};
@@ -481,8 +486,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVGE_II {
             operands: {
-                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                signed<5> simm5 [[imm]] [[in]];
                 unsigned<5> imm5_2 [[imm]] [[in]];
             }
             encoding: auto;
@@ -494,9 +499,9 @@ InstructionSet ScalarEfficiency extends RISCVBase {
 
         CMOVGEU_II {
             operands: {
+                unsigned<5> uimm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
                 unsigned<5> imm5_2 [[imm]] [[in]];
-                unsigned<5> uimm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"cmovgeu.ii", "{name(rd)}, {imm5_2}, {uimm5}"};
@@ -508,8 +513,8 @@ InstructionSet ScalarEfficiency extends RISCVBase {
         MPYADDI {
             operands: {
                 unsigned<5> rs1 [[reg]] [[in]];
-                unsigned<5> imm5 [[imm]] [[in]];
                 unsigned<5> rd [[reg]] [[inout]];
+                unsigned<5> imm5 [[imm]] [[in]];
             }
             encoding: auto;
             assembly: {"mpyaddi", "{name(rd)}, {imm5}, {name(rs1)}"};
@@ -544,29 +549,110 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             }
         }
 
-        // CLO {
-        //     operands: {
-        //         unsigned<5> rs1 [[reg]] [[in]];
-        //         unsigned<5> rd [[reg]] [[out]];
-        //     }
-        //     encoding: auto;
-        //     assembly: {"clo", "{name(rd)}, {name(rs1)}"};
-        //     behavior: {  // TODO: add x0 checks,...
-        //         X[rd] = clo_xlen(X[rs1]);
-        //     }
-        // }
+        CLO {
+            operands: {
+                unsigned<5> rs1 [[reg]] [[in]];
+                unsigned<5> rd [[reg]] [[out]];
+            }
+            encoding: auto;
+            assembly: {"clo", "{name(rd)}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = clo_xlen(X[rs1]);
+            }
+        }
 
-        // CTO {
-        //     operands: {
-        //         unsigned<5> rs1 [[reg]] [[in]];
-        //         unsigned<5> rd [[reg]] [[out]];
-        //     }
-        //     encoding: auto;
-        //     assembly: {"cto", "{name(rd)}, {name(rs1)}"};
-        //     behavior: {  // TODO: add x0 checks,...
-        //         X[rd] = cto_xlen(X[rs1]);
-        //     }
-        // }
+        CTO {
+            operands: {
+                unsigned<5> rs1 [[reg]] [[in]];
+                unsigned<5> rd [[reg]] [[out]];
+            }
+            encoding: auto;
+            assembly: {"cto", "{name(rd)}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = cto_xlen(X[rs1]);
+            }
+        }
+
+        BREV32 {
+            operands: {
+                unsigned<5> rs1 [[reg]] [[in]];
+                unsigned<5> rd [[reg]] [[out]];
+            }
+            encoding: auto;
+            assembly: {"brev32", "{name(rd)}, {name(rs1)}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = brev_xlen(X[rs1]);
+            }
+        }
+
+        LI16 { // TODO?: [[enable=(XLEN==64)]] {
+            operands: {
+                unsigned<16> imm16 [[imm]] [[in]];
+                unsigned<1> n [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[out]];
+            }
+            encoding: auto;
+            assembly: {"li16", "{name(rd)}, {imm16}, {n}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = ((n == 0) ? X[0] : X[rd]) | (imm16 << (n * 16));
+            }
+        }
+
+        EXTS {
+            operands: {
+                unsigned<5> rs1 [[reg]] [[in]];
+                unsigned<5> width5 [[imm]] [[in]];
+                unsigned<5> shamt5 [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[inout]];
+            }
+            encoding: auto;
+            assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (signed<XLEN>)((signed)(X[rs1][width5+shamt5:shamt5]));
+            }
+        }
+
+        EXTU {
+            operands: {
+                unsigned<5> rs1 [[reg]] [[in]];
+                unsigned<5> width5 [[imm]] [[in]];
+                unsigned<5> shamt5 [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[inout]];
+            }
+            encoding: auto;
+            assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd] = (unsigned<XLEN>)((unsigned)(X[rs1][width5+shamt5:shamt5]));
+            }
+        }
+
+        INSB {
+            operands: {
+                unsigned<5> rs1 [[reg]] [[in]];
+                unsigned<5> width5 [[imm]] [[in]];
+                unsigned<5> shamt5 [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[inout]];
+            }
+            encoding: auto;
+            assembly: {"exts", "{name(rd)}, {width5}, {shamt5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd][width5+shamt5:shamt5] = X[rs1][width5-1:0];
+            }
+        }
+
+        INSBI {
+            operands: {
+                unsigned<5> imm5 [[imm]] [[in]];
+                unsigned<5> width5 [[imm]] [[in]];
+                unsigned<5> shamt5 [[imm]] [[in]];
+                unsigned<5> rd [[reg]] [[inout]];
+            }
+            encoding: auto;
+            assembly: {"extu", "{name(rd)}, {idth5}, {shamt5}"};
+            behavior: {  // TODO: add x0 checks,...
+                X[rd][width5+shamt5:shamt5] = imm5[width5-1:0];
+            }
+        }
 
     }
 }

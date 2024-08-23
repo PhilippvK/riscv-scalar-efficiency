@@ -1,6 +1,11 @@
 import "RISCVBase.core_desc"
 
 InstructionSet ScalarEfficiency extends RISCVBase {
+   functions {
+       extern unsigned<XLEN> brev_xlen(unsigned<XLEN>);
+       extern unsigned<XLEN> clo_xlen(unsigned<XLEN>);
+       extern unsigned<XLEN> cto_xlen(unsigned<XLEN>);
+   }
     instructions {
         BEQI {
             operands: {
