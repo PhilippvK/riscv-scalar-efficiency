@@ -3,9 +3,9 @@ import "../../rv_base/RV64I.core_desc"
 
 InstructionSet ScalarEfficiencyRV32 extends RV32I {
     functions {
-        extern unsigned brev_xlen(unsigned);
-        extern unsigned clo_xlen(unsigned);
-        extern unsigned cto_xlen(unsigned);
+        extern unsigned<XLEN> brev_xlen(unsigned<XLEN>);
+        extern unsigned<XLEN> clo_xlen(unsigned<XLEN>);
+        extern unsigned<XLEN> cto_xlen(unsigned<XLEN>);
     }
     instructions {
         BEQI {
@@ -289,9 +289,9 @@ InstructionSet ScalarEfficiencyRV32 extends RV32I {
 
 InstructionSet ScalarEfficiencyRV64 extends RV64I {
     functions {
-        extern unsigned brev_xlen(unsigned);
-        extern unsigned clo_xlen(unsigned);
-        extern unsigned cto_xlen(unsigned);
+        extern unsigned<XLEN> brev_xlen(unsigned<XLEN>);
+        extern unsigned<XLEN> clo_xlen(unsigned<XLEN>);
+        extern unsigned<XLEN> cto_xlen(unsigned<XLEN>);
     }
     instructions {
         BEQI {
