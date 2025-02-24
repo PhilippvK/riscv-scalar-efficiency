@@ -1,4 +1,5 @@
 """Utility which can generate CoreDSL files based on the YAML descriptions."""
+
 import re
 import sys
 from enum import IntEnum, IntFlag, auto
