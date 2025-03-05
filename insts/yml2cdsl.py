@@ -27,7 +27,7 @@ class Status(IntEnum):
     SKIPPED = auto()
 
 
-class OperandType(IntEnum):
+class OperandType(IntFlag):
     """Tracks the type of the operands."""
 
     UNKNOWN = auto()
@@ -181,8 +181,10 @@ def parse_descr(descr, srcs, dsts, free_bits):
 
     def gen_assembly(operands):
         ret = []
-        reads = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.RD]
+        reg_reads = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.RD and op[0] & OperandType.REG]
+        imm_reads = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.RD and op[0] & OperandType.IMM]
         writes = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.WR]
+        asm_order = []
 
         def asm_helper(op_name, op):
             op_type, _, _, _ = op
@@ -196,17 +198,20 @@ def parse_descr(descr, srcs, dsts, free_bits):
             op = operands[op_name]
             temp = asm_helper(op_name, op)
             ret.append(temp)
-        for op_name in sorted(reads):
+            asm_order.append(op_name)
+        for op_name in sorted(reg_reads) + sorted(imm_reads):
             if op_name in writes:
                 continue
             op = operands[op_name]
             temp = asm_helper(op_name, op)
             ret.append(temp)
-        return ", ".join(ret)
+            asm_order.append(op_name)
+        return ", ".join(ret), asm_order
 
-    def gen_operands_code(operands):
+    def gen_operands_code(operands, asm_order):
         ret = []
-        for op_name, op in operands.items():
+        for op_name in asm_order:
+            op = operands[op_name]
             op_type, op_bits, op_sign, op_use = op
             if op_bits == 0:
                 continue
@@ -239,8 +244,8 @@ def parse_descr(descr, srcs, dsts, free_bits):
         return "\n".join(ret)
 
     behav_cdsl = gen_behav(descrs, operands)
-    assembly = gen_assembly(operands)
-    operands_code = gen_operands_code(operands)
+    assembly, asm_order = gen_assembly(operands)
+    operands_code = gen_operands_code(operands, asm_order)
     # print("oc", operands_code)
     # input("!")
     # print("behav_cdsl", behav_cdsl)
