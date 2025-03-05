@@ -16,7 +16,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"beqi", "{name(rs1)}, {simm12}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                if (X[rs1] == simm5) PC += (simm12 << 1);
+                if (X[rs1] == (signed)simm5) PC += ((signed)simm12 << 1);
             }
         }
 
@@ -29,7 +29,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bnei", "{name(rs1)}, {simm12}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                if (X[rs1] != simm5) PC += (simm12 << 1);
+                if (X[rs1] != (signed)simm5) PC += ((signed)simm12 << 1);
             }
         }
 
@@ -42,7 +42,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"blti", "{name(rs1)}, {simm12}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                if ((signed)(X[rs1]) < simm5) PC += (simm12 << 1);
+                if ((signed)(X[rs1]) < (signed)simm5) PC += ((signed)simm12 << 1);
             }
         }
 
@@ -55,7 +55,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bltui", "{name(rs1)}, {simm12}, {uimm5}"};
             behavior: {  // TODO: add x0 checks,...
-                if (X[rs1] < uimm5) PC += (simm12 << 1);
+                if (X[rs1] < (unsigned)uimm5) PC += ((signed)simm12 << 1);
             }
         }
 
@@ -68,7 +68,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bgei", "{name(rs1)}, {simm12}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                if ((signed)(X[rs1]) >= simm5) PC += (simm12 << 1);
+                if ((signed)(X[rs1]) >= (signed)simm5) PC += ((signed)simm12 << 1);
             }
         }
 
@@ -81,7 +81,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bgeui", "{name(rs1)}, {simm12}, {uimm5}"};
             behavior: {  // TODO: add x0 checks,...
-                if (X[rs1] >= uimm5) PC += (simm12 << 1);
+                if (X[rs1] >= (unsigned)uimm5) PC += ((signed)simm12 << 1);
             }
         }
 
@@ -93,7 +93,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"beqz.far", "{name(rs1)}, {simm17}"};
             behavior: {  // TODO: add x0 checks,...
-                if (X[rs1] == 0) PC += (simm17 << 1);
+                if (X[rs1] == 0) PC += ((signed)simm17 << 1);
             }
         }
 
@@ -105,7 +105,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bnez.far", "{name(rs1)}, {simm17}"};
             behavior: {  // TODO: add x0 checks,...
-                if (X[rs1] != 0) PC += (simm17 << 1);
+                if (X[rs1] != 0) PC += ((signed)simm17 << 1);
             }
         }
 
@@ -117,7 +117,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bltz.far", "{name(rs1)}, {simm17}"};
             behavior: {  // TODO: add x0 checks,...
-                if ((signed)(X[rs1]) < 0) PC += (simm17 << 1);
+                if ((signed)(X[rs1]) < 0) PC += ((signed)simm17 << 1);
             }
         }
 
@@ -129,7 +129,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"bgez.far", "{name(rs1)}, {simm17}"};
             behavior: {  // TODO: add x0 checks,...
-                if ((signed)(X[rs1]) >= 0) PC += (simm17 << 1);
+                if ((signed)(X[rs1]) >= 0) PC += ((signed)simm17 << 1);
             }
         }
 
@@ -194,7 +194,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cseleqzi", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] == 0) ? X[rs1] : imm5;
+                X[rd] = (X[rd] == 0) ? X[rs1] : (unsigned)imm5;
             }
         }
 
@@ -285,7 +285,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmoveq.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] == X[rs1]) ? imm5 : X[rd];
+                X[rd] = (X[rd] == X[rs1]) ? (unsigned)imm5 : X[rd];
             }
         }
 
@@ -298,7 +298,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovne.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] != X[rs1]) ? imm5 : X[rd];
+                X[rd] = (X[rd] != X[rs1]) ? (unsigned)imm5 : X[rd];
             }
         }
 
@@ -311,7 +311,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovlt.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = ((signed)(X[rd]) < (signed)(X[rs1])) ? imm5 : X[rd];
+                X[rd] = ((signed)(X[rd]) < (signed)(X[rs1])) ? (unsigned)imm5 : X[rd];
             }
         }
 
@@ -324,7 +324,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovltu.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] < X[rs1]) ? imm5 : X[rd];
+                X[rd] = (X[rd] < X[rs1]) ? (unsigned)imm5 : X[rd];
             }
         }
 
@@ -337,7 +337,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovge.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = ((signed)(X[rd]) >= (signed)(X[rs1])) ? imm5 : X[rd];
+                X[rd] = ((signed)(X[rd]) >= (signed)(X[rs1])) ? (unsigned)imm5 : X[rd];
             }
         }
 
@@ -350,7 +350,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovgeu.ri", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] >= X[rs1]) ? imm5 : X[rd];
+                X[rd] = (X[rd] >= X[rs1]) ? (unsigned)imm5 : X[rd];
             }
         }
 
@@ -363,7 +363,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmoveq.ir", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] == imm5) ? X[rs1] : X[rd];
+                X[rd] = (X[rd] == (unsigned)imm5) ? X[rs1] : X[rd];
             }
         }
 
@@ -376,7 +376,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovne.ir", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] != imm5) ? X[rs1] : X[rd];
+                X[rd] = (X[rd] != (unsigned)imm5) ? X[rs1] : X[rd];
             }
         }
 
@@ -389,7 +389,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovlt.ir", "{name(rd)}, {name(rs1)}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = ((signed)(X[rd]) < simm5) ? X[rs1] : X[rd];
+                X[rd] = ((signed)(X[rd]) < (signed)simm5) ? X[rs1] : X[rd];
             }
         }
 
@@ -402,7 +402,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovltu.ir", "{name(rd)}, {name(rs1)}, {uimm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] < uimm5) ? X[rs1] : X[rd];
+                X[rd] = (X[rd] < (unsigned)uimm5) ? X[rs1] : X[rd];
             }
         }
 
@@ -415,7 +415,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovge.ir", "{name(rd)}, {name(rs1)}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = ((signed)(X[rd]) >= simm5) ? X[rs1] : X[rd];
+                X[rd] = ((signed)(X[rd]) >= (signed)simm5) ? X[rs1] : X[rd];
             }
         }
 
@@ -428,7 +428,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovgeu.ir", "{name(rd)}, {name(rs1)}, {uimm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] >= uimm5) ? X[rs1] : X[rd];
+                X[rd] = (X[rd] >= (unsigned)uimm5) ? X[rs1] : X[rd];
             }
         }
 
@@ -441,7 +441,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmoveq.ii", "{name(rd)}, {imm5}, {imm5_2}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] == imm5) ? imm5_2 : X[rd];
+                X[rd] = (X[rd] == (unsigned)imm5) ? (unsigned)(unsigned)imm5_2 : X[rd];
             }
         }
 
@@ -454,7 +454,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovne.ii", "{name(rd)}, {imm5}, {imm5_2}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] != imm5) ? imm5_2 : X[rd];
+                X[rd] = (X[rd] != (unsigned)imm5) ? (unsigned)(unsigned)imm5_2 : X[rd];
             }
         }
 
@@ -467,7 +467,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovlt.ii", "{name(rd)}, {imm5_2}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = ((signed)(X[rd]) < simm5) ? imm5_2 : X[rd];
+                X[rd] = ((signed)(X[rd]) < (signed)simm5) ? (unsigned)imm5_2 : X[rd];
             }
         }
 
@@ -480,7 +480,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovltu.ii", "{name(rd)}, {imm5_2}, {uimm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] < uimm5) ? imm5_2 : X[rd];
+                X[rd] = (X[rd] < (unsigned)uimm5) ? (unsigned)imm5_2 : X[rd];
             }
         }
 
@@ -493,7 +493,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovge.ii", "{name(rd)}, {imm5_2}, {simm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = ((signed)(X[rd]) >= simm5) ? imm5_2 : X[rd];
+                X[rd] = ((signed)(X[rd]) >= (signed)simm5) ? (unsigned)imm5_2 : X[rd];
             }
         }
 
@@ -506,7 +506,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"cmovgeu.ii", "{name(rd)}, {imm5_2}, {uimm5}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] = (X[rd] >= uimm5) ? imm5_2 : X[rd];
+                X[rd] = (X[rd] >= (unsigned)uimm5) ? (unsigned)imm5_2 : X[rd];
             }
         }
 
@@ -519,7 +519,7 @@ InstructionSet ScalarEfficiency extends RISCVBase {
             encoding: auto;
             assembly: {"mpyaddi", "{name(rd)}, {imm5}, {name(rs1)}"};
             behavior: {  // TODO: add x0 checks,...
-                X[rd] += X[rs1] * imm5;
+                X[rd] += X[rs1] * (unsigned)imm5;
             }
         }
 
