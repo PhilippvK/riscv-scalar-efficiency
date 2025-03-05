@@ -1,5 +1,5 @@
-import "../../rv_base/RV32I.core_desc"
-import "../../rv_base/RV64I.core_desc"
+import "../../../common/cdsl/rv_base/RV32I.core_desc"
+import "../../../common/cdsl/rv_base/RV64I.core_desc"
 
 InstructionSet ScalarEfficiencyRV32 extends RV32I {
     functions {
