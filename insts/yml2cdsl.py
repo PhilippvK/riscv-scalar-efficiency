@@ -157,7 +157,10 @@ def parse_descr(descr, srcs, dsts, free_bits):
             for k, v in REPLACEMENTS.items():
                 cdsl = cdsl.replace(k, v)
             for op_name, op in operands.items():
-                op_type, op_bits, _, _ = op
+                op_type, op_bits, op_sign, _ = op
+                if op_type == OperandType.IMM:
+                    sng = "signed" if op_sign else "unsigned"
+                    cdsl = cdsl.replace(op_name, f"({sng}){op_name}")
                 if op_type != OperandType.REG:
                     continue
                 if op_bits == 0:
