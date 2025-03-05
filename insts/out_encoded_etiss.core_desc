@@ -281,7 +281,7 @@ InstructionSet ScalarEfficiencyRV32 extends RV32I {
         }
         INSBI {
             encoding: 2'b11 :: shamt5[4:0] :: width5[4:0] :: imm5[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-            assembly: {"extu", "{name(rd)}, {width5}, {shamt5}"};
+            assembly: {"extu", "{name(rd)}, {imm5}, {width5}, {shamt5}"};
             behavior: X[rd][width5 + shamt5:shamt5] = imm5[width5 - 1:0];
         }
     }
@@ -567,7 +567,7 @@ InstructionSet ScalarEfficiencyRV32 extends RV32I {
 //         }
 //         INSBI {
 //             encoding: 2'b11 :: shamt5[4:0] :: width5[4:0] :: imm5[4:0] :: 3'b100 :: rd[4:0] :: 7'b1011011;
-//             assembly: {"extu", "{name(rd)}, {width5}, {shamt5}"};
+//             assembly: {"extu", "{name(rd)}, {imm5}, {width5}, {shamt5}"};
 //             behavior: X[rd][width5 + shamt5:shamt5] = imm5[width5 - 1:0];
 //         }
 //     }
