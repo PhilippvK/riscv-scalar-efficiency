@@ -181,8 +181,16 @@ def parse_descr(descr, srcs, dsts, free_bits):
 
     def gen_assembly(operands):
         ret = []
-        reg_reads = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.RD and op[0] & OperandType.REG]
-        imm_reads = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.RD and op[0] & OperandType.IMM]
+        reg_reads = [
+            op_name
+            for op_name, op in operands.items()
+            if op[1] > 0 and op[3] & OperandUse.RD and op[0] & OperandType.REG
+        ]
+        imm_reads = [
+            op_name
+            for op_name, op in operands.items()
+            if op[1] > 0 and op[3] & OperandUse.RD and op[0] & OperandType.IMM
+        ]
         writes = [op_name for op_name, op in operands.items() if op[1] > 0 and op[3] & OperandUse.WR]
         asm_order = []
 
