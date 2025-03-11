@@ -294,9 +294,9 @@ def main():
         # print("dsts", dsts)
         # print("free_bits", free_bits)
         # print("description", description)
-        if enc_size != 32:
+        if enc_size not in [32, 48]:
             instr_status[mnemonic] = Status.SKIPPED
-            instr_reason[mnemonic] = "only supporting 32-bit instructions"
+            instr_reason[mnemonic] = "Unsupported enc_size: {enc_size}"
             continue
         instr_status[mnemonic] = Status.UNKNOWN
 
