@@ -8,20 +8,21 @@ InstructionSet ScalarEfficiencyRV32 extends RV32I {
         extern unsigned<XLEN> cto_xlen(unsigned<XLEN>);
     }
     instructions {
-        BEQI {
-            encoding: simm12[11:5] :: simm5[4:0] :: rs1[4:0] :: 3'b000 :: simm12[4:0] :: 7'b1111011;
-            assembly: {"beqi", "{name(rs1)}, {simm12}, {simm5}"};
-            behavior: if (X[rs1] == (signed)(simm5)) {
-                PC = PC + ((signed)(simm12) << 1);
-            }
-        }
-        BNEI {
-            encoding: simm12[11:5] :: simm5[4:0] :: rs1[4:0] :: 3'b001 :: simm12[4:0] :: 7'b1111011;
-            assembly: {"bnei", "{name(rs1)}, {simm12}, {simm5}"};
-            behavior: if (X[rs1] != (signed)(simm5)) {
-                PC = PC + ((signed)(simm12) << 1);
-            }
-        }
+        // Already upstream in LLVM 22+ as Zibi extension
+        // BEQI {
+        //     encoding: simm12[11:5] :: simm5[4:0] :: rs1[4:0] :: 3'b000 :: simm12[4:0] :: 7'b1111011;
+        //     assembly: {"beqi", "{name(rs1)}, {simm12}, {simm5}"};
+        //     behavior: if (X[rs1] == (signed)(simm5)) {
+        //         PC = PC + ((signed)(simm12) << 1);
+        //     }
+        // }
+        // BNEI {
+        //     encoding: simm12[11:5] :: simm5[4:0] :: rs1[4:0] :: 3'b001 :: simm12[4:0] :: 7'b1111011;
+        //     assembly: {"bnei", "{name(rs1)}, {simm12}, {simm5}"};
+        //     behavior: if (X[rs1] != (signed)(simm5)) {
+        //         PC = PC + ((signed)(simm12) << 1);
+        //     }
+        // }
         BLTI {
             encoding: simm12[11:5] :: simm5[4:0] :: rs1[4:0] :: 3'b010 :: simm12[4:0] :: 7'b1111011;
             assembly: {"blti", "{name(rs1)}, {simm12}, {simm5}"};
